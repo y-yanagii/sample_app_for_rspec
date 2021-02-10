@@ -13,6 +13,8 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'sorcery'
 
 group :development, :test do
+  gem 'rspec-rails', '~> 4.0.2'
+  gem 'factory_bot_rails'
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
 end
 
