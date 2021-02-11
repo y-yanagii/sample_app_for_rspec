@@ -1,48 +1,37 @@
 require 'rails_helper'
 
 RSpec.describe Task, type: :model do
-  let(:user) { FactoryBot.create(:user) }
-  let(:task) { FactoryBot.create(:task) }
-
-  describe "#task validation check" do
-    it "has a valid factory of task" do
+  describe 'validation' do
+    it 'is valid with all attributes' do
+      task = build(:task)
       expect(task).to be_valid
       expect(task.errors).to be_empty
     end
 
-    it "is invalid without a title" do
-      task = FactoryBot.build(:task, :invalid_title)
-      expect(task).to be_invalid
-      expect(task.errors[:title]).to include("can't be blank")
+    it 'is invalid without title' do
+      task_without_title = build(:task, title: "")
+      expect(task_without_title).to be_invalid
+      expect(task_without_title.errors[:title]).to eq ["can't be blank"]
     end
 
-    it "is invalid with a status" do
-      task = FactoryBot.build(:task, :invalid_status)
-      expect(task).to be_invalid
-      expect(task.errors[:status]).to include("can't be blank")
+    it 'is invalid without status' do
+      task_without_status = build(:task, status: nil)
+      expect(task_without_status).to be_invalid
+      expect(task_without_status.errors[:status]).to eq ["can't be blank"]
     end
 
-    it "is invalid with a duplicate title" do
-      task2 = Task.new(
-        title: task.title,
-        content: "test content",
-        status: 0,
-        deadline: Time.now,
-        user: user
-      )
-      task2.invalid?
-      expect(task2.errors[:title]).to include("has already been taken")
+    it 'is invalid with a duplicate title' do
+      task = create(:task)
+      task_with_duplicated_title = build(:task, title: task.title)
+      expect(task_with_duplicated_title).to be_invalid
+      expect(task_with_duplicated_title.errors[:title]).to eq ["has already been taken"]
     end
 
-    it "is valid with another title" do
-      task2 = Task.new(
-        title: task.title + "2",
-        content: "test content",
-        status: 0,
-        deadline: Time.now,
-        user: user
-      )
-      expect(task2).to be_valid
+    it 'is valid with another title' do
+      task = create(:task)
+      task_with_another_title = build(:task, title: 'another_title')
+      expect(task_with_another_title).to be_valid
+      expect(task_with_another_title.errors).to be_empty
     end
   end
 end
