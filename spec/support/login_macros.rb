@@ -1,4 +1,4 @@
-module LoginSupport
+module LoginMacros
   # ログイン処理(capybara)
   def login_as(user)
     visit root_path
@@ -9,7 +9,7 @@ module LoginSupport
   end
 end
 
-# RSpecの設定LoginSupportをinclude
+# RSpecの設定LoginSupportをinclude（初期化）
 RSpec.configure do |config|
-  config.include LoginSupport
+  config.include LoginMacros
 end

@@ -65,11 +65,5 @@ RSpec.configure do |config|
   # 各テストケースクラスにファクトリ操作用のメソッドをinclude
   # テスト中に、FactoryBot.create(:user) ではなく、create(:user) と書けるようになる。
   config.include FactoryBot::Syntax::Methods
-
-  # ブラウザテスト設定
-  config.before(:each) do |example|
-    if example.metadata[:type] == :system
-      driven_by :selenium, using: :headless_chrome, screen_size: [1400, 1400]
-    end
-  end
+  config.include LoginMacros
 end
